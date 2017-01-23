@@ -1,0 +1,62 @@
+Aufgabe 3)
+
+Teilaufgabe a)
+
+/* --------------------------------------- */
+Logische Äquivalenzen: 
+
+a ∨ a ≡ a
+(a => b) ≡ (~a ∨ b)
+(a ∧ b) => c ≡ (a => c) ∨ (b => c)
+(a ∨ b) => c ≡ (a => c) ∧ (b => c)
+a ∧ (b ∨ c) ≡ (a ∧ b) ∨ (a ∧ c)
+/* --------------------------------------- */
+
+Bauer Horst besitzt einen kleinen Acker, einen Wolf und das Schwein Borsti.
+
+Wenn der Händler ehrlich ist, ist das Saatgut, das Horst bei ihm kauft, gut.
+
+H = Händler ist ehrlich.
+S = Saatgut ist gut.
+
+(H => S) ≡ (~H ∨ S) = {~H, S}
+
+Wenn das Saatgut und das Wetter im Sommer gut sind, verdient Horst ausreichend Geld.
+
+W1 = Wetter ist gut.
+G = Ausreichend Geld verdient.
+
+(S ∧ W1) => G ≡ (S => G) ∨ (W1 => G) ≡ (~S ∨ G) ∨ (~W1 ∨ G) ≡ (~S ∨ ~W1 ∨ G) = {~S, ~W1​, G}
+
+Wenn er ausreichend Geld hat, füttert er den Wolf.
+
+W2 = Wolf wird gefüttert.
+
+(G => W2) ≡ (~G ∨ W2) = {~G, W​2}
+
+Wenn er den Wolf gefüttert hat und in der Stadt Kirmes ist, geht er in die Stadt und lässt Wolf und Borsti allein.
+
+K = Kirmes ist in der Stadt.
+A = Wolf und Borsti allein.
+
+(W2 ∧ K) => A ≡ (W2 => A) ∨ (K => A) ≡ (~W2 ∨ A) ∨ (~K ∨ A) ≡ (~W2 ∨ ~K ∨ A) = {~W​2, ~K, A}
+
+Wenn der Wolf gefüttert worden ist, ist er satt.
+
+W3 = Wolf ist statt.
+
+(W2 => W3) ≡ (~W2 ∨ W3) = {~W​2, W​3}
+
+Wenn der Wolf satt ist oder der Bauer anwesend ist, wird Borsti nicht gefressen.
+
+B = Borsti wird gefressen.
+
+(W3 ∨ ~A) => ~B ≡ (~W3 ∧ A) ∨ ~B ≡ (~W3 ∨ ~B) ∧ (A ∨ ~B) = {~W3​, ~B}, {A, ~B}
+
+Man verknüpfe nun jeden Term in eine KNF zusammen:
+
+(~H ∨ S) ∧ (~S ∨ ~W1 ∨ G) ∧ (~G ∨ W2) ∧ (~W2 ∨ ~K ∨ A) ∧ (~W2 ∨ W3) ∧ (~W3 ∨ ~B) ∧ (A ∨ ~B)
+
+So erhält man daraus die folgende Klausel, die auch mit der Klausel aus der Aufgabenstellung übereinstimmt:
+
+{{~H, S}, {~S, ~W1​, G}, {~G, W​2}, {~W​2, ~K, A}, {~W​2, W​3}, {~W3​, ~B}, {A, ~B}}

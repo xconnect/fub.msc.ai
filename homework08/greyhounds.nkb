@@ -1,0 +1,47 @@
+% GREYHOUNDS - a sample greyhound identification system for use with the native shell.
+
+% top_goal where Native starts the inference.
+
+top_goal(X) :- greyhound(X).
+
+order(langhaar) :- fellart(lang).
+order(rauhhaar) :- fellart(rauh).
+order(kurzhaar) :- fellart(kurz).
+
+family(okzidental) :- order(kurzhaar).
+family(oriental)   :- order(langhaar).
+family(mediterran) :- order(rauhhaar).
+
+greyhound(afghane) :- family(oriental), voice(laut), head(schlank), color(hellbraun), country(afghanistan).
+greyhound(barsoi) :- family(oriental), voice(leise), head(schlank), color(hellbraun), country(russland).
+greyhound(saluki) :- family(oriental), voice(laut), head(schlank), color(hellbraun), country(persien).
+greyhound(deerhound) :- family(okzidental), voice(laut), head(schlank), color(braun), country(schottland).
+greyhound(irischer wolfshund) :- family(oriental), voice(laut), head(breit), color(grau), country(irland).
+greyhound(azawakh) :- family(oriental), voice(laut), head(schlank), color(braun), country(persien).
+greyhound(chart_polski) :- family(mediterran), voice(leise), head(breit), color(hellbraun), country(polen).
+greyhound(galgo_espagnol) :- family(mediterran), voice(laut), head(schlank), color(gescheckt), country(spanien).
+greyhound(italienisches_windspiel) :- family(okzidental), voice(laut), head(schlank), color(gescheckt), country(italien).
+greyhound(magyar_agar) :- family(oriental), voice(leise), head(schlank), color(hellbraun), country(ungarn).
+greyhound(sloughi) :- family(oriental), voice(laut), head(schlank), color(hellbraun), country(nordafrika).
+greyhound(whippet) :- family(okzidental), voice(leise), head(schlank), (color(gescheckt); color(hellbraun); color(weis)), country(england).
+greyhound(grayhound) :- family(okzidental), voice(laut), head(schlank), color(gescheckt), country(england).
+
+voice(X)   :- ask(voice,X).
+head(X)    :- ask(head,X).
+color(X)   :- ask(color,X).
+country(X) :- ask(country,X).
+fellart(X) :- menuask(fellart,X,[lang,rauh,kurz]).
+
+country(russland).
+country(polen).
+country(schottland).
+country(spanien).
+country(england).
+country(irland).
+country(italien).
+country(ungarn).
+country(afghanistan).
+country(persien).
+country(nordafrika).
+
+multivalued(color).

@@ -1,0 +1,190 @@
+\documentclass[12pt]{article}
+
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb} % to display symbols for real numbers, integers etc. Usage: \mathbb{R}
+\usepackage{graphicx}
+\usepackage{listings} % to display programming code
+%\usepackage[ngerman]{babel}
+\usepackage{color}
+\usepackage{relsize} % to display scaled math symbols (big summation symbol etc.)
+\usepackage{textcomp}
+
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{ % to display programming code in nice colors
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	language=matlab,
+		basicstyle=\scriptsize, %for extra small font size
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+		frame=single, %draw frame
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+        numbers=left,
+        stepnumber=1,
+        firstnumber=1,
+        numberfirstline=true,
+        linewidth=14cm,
+}
+
+\title{\"Ubungsblatt 11\\ \glqq K\"unstliche Intelligenz\grqq}
+\author{T. Glei\ss ner, N. Lehmann, A. Zubarev}
+\date{10.07.2015}
+\begin{document}
+\maketitle
+%\renewcommand{\contentsname}{Table of Contents}
+\tableofcontents
+\newpage
+
+\section{Forward Chaining}
+
+\begin{enumerate}
+\item If X chirps and sings then X is a canary.
+\item If X is a canary then X is yellow.
+\item Tweety eats flies.
+\item Tweety chirps.
+\item Tweety sings.
+\item Tweety is yellow.
+\end{enumerate}
+
+\subsection{Teilaufgabe a)}
+
+Substituiere alle X mit Tweety, für die die Aussage wahr wird.\\
+\\
+If Tweety chirps (4) and sings (5) then Tweety is a canary.
+
+\subsection{Teilaufgabe b)}
+
+1) substituiere X durch Tweety\\
+2) if Tweety chirps and sings $\Rightarrow$ if Tweety chirps $\wedge$ if Tweety sings\\
+3) Tweety chirps (4) $\Rightarrow$ true\\
+4) Tweety sings  (5) $\Rightarrow$ true\\
+5) 3) $\wedge$ 4) $\Rightarrow$ then Tweety is a canary.
+
+\newpage
+
+\subsection{Teilaufgabe c)}
+
+\textbf{Forward Chaining}
+\begin{itemize}
+\item dynamisches, datengesteuertes Verfahren
+\item generiert neues Faktenwissen (auch unnötiges)
+\item gut geeignet für unsichere Ziele und Auswahlmöglichkeiten
+\end{itemize}
+\textbf{Backward Chaining}
+\begin{itemize}
+\item statisches, zielgesteuertes Verfahren
+\item Beweisrichtung: vom Ziel zu den Fakten
+\item gut geeignet wenn alle Ziele und Auswahlmöglichkeiten bekannt sind
+\end{itemize}
+
+\section{Produktionssystem}
+
+\begin{lstlisting}[language=Prolog]
+initial_data([goal(select_budget),
+	not_end_yet,
+	legal_budgets([
+		high_end,
+		mid_end,
+		low_end]),
+	cpu(low_end, [i3]),
+	cpu(mid_end, [i3, i5]),
+	cpu(high_end, [i3, i5, i7]),
+	gpu(low_end, [gpu_onboard]),
+	gpu(mid_end, [gpu_onboard, gpu_extern]),
+	gpu(high_end, [gpu_onboard, gpu_extern, gpu_water_cooled]),
+	harddrive(low_end, [hdd]),
+	harddrive(mid_end, [hdd, ssd]),
+	harddrive(high_end, [hdd, ssd]).
+
+% Select your budget
+rule 100:
+	[1: goal(select_budget),2: legal_budgets(LT)] ==>
+	[retract(1), nl, write('Select a budget:'),nl,nl,
+	write('Available budgets are:'),nl,write(LT),nl,nl,
+	assert(goal(read_budget))].
+
+rule 101:
+	[1: goal(read_budget),2: legal_budgets(LB)] ==>
+	[prompt('budget> ', B),	member(B,LB), retract(1),
+	assert(budget(B)), assert(goal(assemble_cpu))].
+
+rule 102:
+	[1: goal(read_budget),2: legal_budgets(LT)] ==>
+	[nl,write('Unknown. Select one of these:'),nl,
+	write(LT)].
+
+% CPU
+rule 200:
+	[1: goal(assemble_cpu),2: budget(B),cpu(B,CPU)] ==>
+	[retract(1), nl, write('Select cpu. Your budget '),
+	write(B), write(' allows for the following parts:'),nl,
+	write(CPU),nl,nl,assert(goal(pick_cpu))].
+
+rule 201:
+	[1: goal(pick_cpu),2: budget(B),cpu(B, C)] ==>
+	[prompt('cpu> ', CPU),member(CPU,C),retract(1),
+	assert(picked_cpu(CPU)),assert(goal(assemble_gpu))].
+
+rule 202:
+	[1: goal(pick_cpu),2: budget(B),cpu(B,CPU)]	==>
+	[write('Your cpu seems to not fit your budget. Choose from the following:'),nl,
+	write(CPU),nl].
+
+%GPU
+rule 200:
+	[1: goal(assemble_gpu),2: budget(B),gpu(B,GPU)] ==>
+	[retract(1),nl,	write('Pick your gpu. Your budget '),
+	write(B),write(' allows for the following parts:'),nl,
+	write(GPU),nl,nl,assert(goal(pick_gpu))].
+
+rule 201:
+	[1: goal(pick_gpu),2: budget(B),gpu(B, G)] ==>
+	[prompt('gpu> ', GPU),member(GPU,G),retract(1),
+	assert(picked_gpu(GPU)),assert(goal(assemble_harddrive))].
+
+rule 202:
+	[1: goal(pick_gpu),2: budget(B), gpu(B,GPU)] ==>
+	[nl,write('Your gpu seems to not fit your budget. Choose from the following:'),nl,
+	write(GPU),nl].
+
+% Hardrive
+rule 300:
+	[1: goal(assemble_harddrive),2: budget(B),harddrive(B,HDD)] ==>
+	[retract(1),nl, write('Pick your harddrive. Your budget '),
+	write(B), write(' allows for the following parts:'),nl,
+	write(HDD),nl,nl, assert(goal(pick_harddrive))].
+
+rule 301:
+	[1: goal(pick_harddrive),2: budget(B),harddrive(B, G)] ==>
+	[prompt('harddrive> ', HDD), member(HDD,G), retract(1),
+	assert(picked_harddrive(HDD)), assert(goal(show_pc))].
+
+rule 302:
+	[1: goal(pick_harddrive),2: budget(B),harddrive(B,HDD)] ==>
+	[nl,write('Your harddrive seems to not fit your budget. Choose from the following:'),nl,
+	write(HDD),nl].
+
+% Show the results
+rule 600:
+	[1: goal(show_pc),picked_cpu(CPU),picked_gpu(GPU),picked_harddrive(HDD)]
+	==>	[retract(all), 	nl,write('Your configuration looks as follows:'),nl,nl,
+	write('CPU: '),write(CPU),nl, write('GPU: '),write(GPU),nl, write('Harddrive: '),write(HDD),nl.
+\end{lstlisting}
+
+
+\end{document}

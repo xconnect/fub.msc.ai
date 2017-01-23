@@ -1,0 +1,179 @@
+\documentclass{article}
+%\documentclass[fleqn]{article}
+
+\marginparwidth 0.5in 
+\oddsidemargin 0.25in 
+\evensidemargin 0.25in 
+\marginparsep 0.25in
+\topmargin 0.25in 
+\textwidth 6in \textheight 8 in
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ngerman}
+\usepackage{graphics}
+\usepackage{pdfpages} 
+\usepackage{amsmath, amssymb}
+\usepackage{stmaryrd}
+
+\newcommand{\lbox}{\Box}
+\newcommand{\ldiamond}{\Diamond}
+\newcommand{\limplies}{\Rightarrow}
+\newcommand{\lequivalent}{\Leftrightarrow}
+
+\title{Künstliche Intelligenz\\~\\Hausaufgabe 6\\ \small{N. Lehmann, T. Gleißner, A. Zubarev}}
+\date{27.05.2015}
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Aufgabe 1: Modallogik}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+there are tho agents $a$ and $b$ \\
+$ws_i$ means agent $i$ has a white spot \\
+$\lbox_i x$ means agent $i$ knows $x$ \\
+$\lbox_{common} x$ means all agents know $x$ \\
+
+\begin{enumerate}
+
+\item At least one agent has a white spot. This implies it is common knowledge that at least one agent has a white spot.
+\begin{flalign}
+\lbox_{common} ( ws_a \lor ws_b )
+\end{flalign}
+
+\item If one agent has a white spot the other agent sees/knows this.
+\begin{flalign}
+\lbox_{common} ( ws_a \implies \lbox_b ws_a ) \\
+\lbox_{common} ( ws_b \implies \lbox_a ws_b )
+\end{flalign}
+
+\item If one agent does not have a white spot the other agent sees/knows this.
+\begin{flalign}
+\lbox_{common} ( \lnot ws_a \implies \lbox_b \lnot ws_a ) \\
+\lbox_{common} ( \lnot ws_b \implies \lbox_a \lnot ws_b )
+\end{flalign}
+
+\item $\lbox_{common}$ is modelled as an S4 operator.
+\begin{flalign}
+( \lbox_{common} x ) \implies x &\;\;\; \text{only things that are true can be known} \\
+( \lbox_{common} x ) \implies ( \lbox_{common} \lbox_{common} x ) &\;\;\; \text{if x is commonly known, it is commonly known that x is commonly known}
+\end{flalign}
+
+\item $\lbox_a, \lbox_b$ are modelled as K operators.
+\begin{flalign}
+( \lbox_a x ) \implies ( \lbox_a \lbox_a x ) &\;\;\; \text{a knows that a knows that x} \\
+( \lbox_b x ) \implies ( \lbox_b \lbox_b x ) &\;\;\; \text{b knows that b knows that x}
+\end{flalign}
+
+\item Connect common knowledge with the knowledge of the agents.
+\begin{flalign}
+( \lbox_{common} x ) \implies \lbox_a x &\;\;\; \text{if x is common knowledge then a knows x too} \\
+( \lbox_{common} x ) \implies \lbox_b x &\;\;\; \text{if x is common knowledge then b knows x too}
+\end{flalign}
+
+\item When an agent does (not) know something the other agent knows that he does (not) know.
+\begin{flalign}
+( \lbox_a x ) \implies \lbox_b \lbox_a x &\;\;\;\;\;\;\;\;\; ( \lbox_b x ) \implies \lbox_a \lbox_b x  \\
+( \lnot \lbox_a x ) \implies \lbox_b \lnot \lbox_a x &\;\;\;\;\;\;\;\;\; ( \lnot \lbox_b x ) \implies \lbox_a \lnot \lbox_b x
+\end{flalign}
+
+\item The first agent does not know whether he has a white spot.
+\begin{flalign}
+\lnot \lbox_a ws_a
+\end{flalign}
+
+\item We can now prove: The second agent does know he has a whit spot (or the opposite).
+\begin{flalign}
+\lbox_b ws_b
+\end{flalign}
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Aufgabe 2: Tableau}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{2a $\ldiamond ( P \implies \lbox P )$ in T}
+\setcounter{equation}{0}
+\begin{flalign}
+(1) &\; \lnot ( \ldiamond ( P \implies \lbox P ) )
+& \text{negation} \\
+(1) &\; \lnot ( P \implies \lbox P )
+& \text{from eq. 1: T rule} \\
+(1) &\; P
+& \text{from eq. 2: } \lnot ( \cdot \implies \cdot ) \\
+(1) &\; \lnot \lbox P
+& \text{from eq. 2: } \lnot ( \cdot \implies \cdot ) \\
+(1.1) &\; \lnot P
+& \text{from eq. 4: prefix (1.1) new to b.} \\
+(1.1) &\; \lnot ( P \implies \lbox P )
+& \text{from eq. 1: prefix (1.1) already occurs on path} \\
+(1.1) &\; P
+& \text{from eq. 6: } \lnot ( \cdot \implies \cdot ) \\
+(1.1) &\; \lnot \lbox P
+& \text{from eq. 6: } \lnot ( \cdot \implies \cdot ) \\
+\end{flalign}
+The only path is closed by $(1.1) \; P$ (eq. 7) and $(1.1) \; \lnot P$ (eq. 5).
+
+\subsection*{2b $( \lbox P \land \lbox Q ) \limplies ( \lbox ( \lbox P \land \lbox Q ) )$ in K4}
+\setcounter{equation}{0}
+\begin{flalign}
+(1) &\; \lnot ( ( \lbox P \land \lbox Q ) \limplies ( \lbox ( \lbox P \land \lbox Q ) ) )
+&&& \text{negation} \\
+(1) &\; \lbox P \land \lbox Q
+&&& \text{from eq. 1: } \lnot ( \cdot \limplies \cdot ) & \\
+(1) &\; \lnot \lbox ( \lbox P \land Q )
+&&& \text{from eq. 1: } \lnot ( \cdot \limplies \cdot ) & \\
+(1) &\; \lbox P
+&&& \text{fom eq. 2: } \cdot \land \cdot \\
+(1) &\; \lbox Q
+&&& \text{fom eq. 2: } \cdot \land \cdot \\
+(1.1) &\; \lnot ( \lbox P \land Q )
+&&& \text{from eq. 3: prefix (1.1) new to b.: } \lnot \lbox \cdot \\
+(1.1) &\; \lnot \lbox P & (1.1) &\; \lnot Q
+& \text{from eq 6:} \lnot( \cdot \land \cdot ) \\
+(1.1) &\; \lbox P & (1.1) &\; \lbox Q
+& \text{from eq. 4 and 5, 4 rule} \\
+&& (1.1) &\; Q
+& (1) \; \lbox Q \text{ already occurs on the branch}
+\end{flalign}
+The left path is closed by $(1.1) \; \lnot \lbox P$ (eq. 7) and $(1.1) \lbox P$ (eq.8). \\
+The right path is closed by $(1.1) \; \lnot Q$ (eq. 7) and $(1.1) Q$ (eq. 9).
+
+\subsection*{2c $\lbox ( P \implies Q ) \lor \lbox \lnot \lbox ( \lnot Q \implies \lnot P )$ in S5}
+\setcounter{equation}{0}
+\begin{flalign}
+(1) &\; \lnot (\lbox ( P \implies Q ) \lor \lbox \lnot \lbox ( \lnot Q \implies \lnot P ) )
+& \text{negation} \\
+(1.1) &\; \lnot ( ( P \implies Q ) \lor \lbox \lnot \lbox ( \lnot Q \implies \lnot P ) )
+& \text{from eq. 1: prefix (1.1) new to b.} \\
+(1.1) &\; \lnot ( P \implies Q )
+& \text{from eq. 2: } \lnot ( \cdot \lor \cdot ) \\
+(1.1) &\; \lnot \lbox \lnot \lbox ( \lnot Q \implies \lnot P )
+& \text{from eq. 2: } \lnot ( \cdot \lor \cdot ) \\
+(1.1) &\; P
+& \text{from eq. 3: } \lnot ( \cdot \lor \cdot ) \\
+(1.1) &\; \lnot Q
+& \text{from eq. 3: } \lnot ( \cdot \lor \cdot ) \\
+(1.2) &\; \lnot \lnot \lbox ( \lnot Q \implies \lnot P )
+& \text{from eq. 4: prefix (1.2) new to b.} \\
+(1.2) &\; \lbox ( \lnot Q \implies \lnot P )
+& \text{double negation} \\
+(1.1) &\; \lbox ( \lnot Q \implies \lnot P )
+& \text{4r rule} \\
+(1) &\; \lbox ( \lnot Q \implies \lnot P )
+& \text{4r rule} \\
+(1.1) &\; \lnot Q \implies \lnot P
+& \text{from eq. 10: } \lbox \cdot \\
+(1.1) &\; Q
+& \text{from eq. 11: } \lnot \cdot \implies \cdot \\
+(1.1) &\; \lnot P
+& \text{from eq. 11: } \lnot \cdot \implies \cdot
+\end{flalign}
+The only path is closed by $(1.1) \; P$ (eq. 5) and $(1.1) \; \lnot P$ (eq. 13).
+
+
+\end{document}

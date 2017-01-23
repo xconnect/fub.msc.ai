@@ -1,0 +1,185 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ngerman}
+ 
+\title{Künstliche Intelligenz\\~\\Hausaufgabe 3\\ \small{N. Lehmann, A. Zubarev}}
+\date{10.05.2015}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Wahrheitstabellen}
+
+\subsection{Teilaufgabe a)}
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+$p$ & $q$ & $r$ & $p \vee q \vee r$ & $r \Rightarrow (p \vee q)$ & $(q \wedge r) \Rightarrow p$ & $\neg p \vee q \vee r$ & $q \Rightarrow p \vee \neg (q \Rightarrow (p \vee r))$\\
+\hline
+0 & 0 & 0 & 0 & - & - & - & -\\
+0 & 0 & 1 & 1 & 0 & - & - & 1\\
+0 & 1 & 0 & 1 & 1 & 1 & 1 & 1\\
+0 & 1 & 1 & 1 & 1 & 0 & - & -\\
+1 & 0 & 0 & 1 & 1 & 1 & 0 & -\\
+1 & 0 & 1 & 1 & 1 & 1 & 1 & 1\\
+1 & 1 & 0 & 1 & 1 & 1 & 1 & 1\\
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+
+\subsection{Teilaufgabe b)}
+
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+$p$ & $q$ & $r$ & $q \vee r$ & $q \Rightarrow \neg p$ & $\neg (r \wedge p)$ & $\neg p$\\
+\hline
+0 & 0 & 0 & 0 & - & - & - \\
+0 & 0 & 1 & 1 & 1 & 1 & 1 \\
+0 & 1 & 0 & 1 & 1 & 1 & 1 \\
+0 & 1 & 1 & 1 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 & - & - & - \\
+1 & 0 & 1 & 1 & 1 & 0 & - \\
+1 & 1 & 0 & 1 & 0 & - & - \\
+1 & 1 & 1 & 1 & 0 & - & - \\
+\hline
+\end{tabular}
+
+\subsection{Teilaufgabe c)}
+
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+$p$ & $q$ & $r$ & $p \Rightarrow q$ & $q$ & $\neg (p \wedge q)$\\
+\hline
+0 & 0 & 0 & 1 & 0 & - \\
+0 & 0 & 1 & 1 & 0 & - \\
+0 & 1 & 0 & 1 & 1 & 0 \\
+0 & 1 & 1 & 1 & 1 & 0 \\
+1 & 0 & 0 & 0 & - & - \\
+1 & 0 & 1 & 0 & - & - \\
+1 & 1 & 0 & 1 & 1 & 0 \\
+1 & 1 & 1 & 1 & 1 & 0 \\
+\hline
+\end{tabular}
+
+\section{Alternative Repräsentation von Hornklauseln}
+
+\subsection{Teilaufgabe a)}
+
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+$p$ & $q$ & $r$ & $c$ & $p \wedge q \wedge r$ & $(p \wedge q \wedge r) \Rightarrow c$\\
+\hline
+0 & 0 & 0 & 0 & 0 & 1\\
+0 & 0 & 0 & 1 & 0 & 1\\
+0 & 0 & 1 & 0 & 0 & 1\\
+0 & 0 & 1 & 1 & 0 & 1\\
+0 & 1 & 0 & 0 & 0 & 1\\
+0 & 1 & 0 & 1 & 0 & 1\\
+0 & 1 & 1 & 0 & 0 & 1\\
+0 & 1 & 1 & 1 & 0 & 1\\
+1 & 0 & 0 & 0 & 0 & 1\\
+1 & 0 & 0 & 1 & 0 & 1\\
+1 & 0 & 1 & 0 & 0 & 1\\
+1 & 0 & 1 & 1 & 0 & 1\\
+1 & 1 & 0 & 0 & 0 & 1\\
+1 & 1 & 0 & 1 & 0 & 1\\
+1 & 1 & 1 & 0 & 1 & 0\\
+1 & 1 & 1 & 1 & 1 & 1\\
+\hline
+\end{tabular}
+
+\subsection{Teilaufgabe b)}
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+$c$ & $p$ & $q$ & $r$ & $\neg p$ & $\neg q$ & $\neg r$ & $c \vee \neg p \vee \neg q \vee r$\\
+\hline
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 1 \\
+0 & 0 & 1 & 0 & 1 & 0 & 1 & 1 \\
+0 & 0 & 1 & 1 & 1 & 0 & 0 & 1 \\
+0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 \\
+0 & 1 & 0 & 1 & 0 & 1 & 0 & 1 \\
+0 & 1 & 1 & 0 & 0 & 0 & 1 & 1 \\
+0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+1 & 0 & 0 & 1 & 1 & 1 & 0 & 1 \\
+1 & 0 & 1 & 0 & 1 & 0 & 1 & 1 \\
+1 & 0 & 1 & 1 & 1 & 0 & 0 & 1 \\
+1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 \\
+1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 \\
+1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 \\
+1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 \\
+\hline
+\end{tabular}
+
+\section{SLD-Resolution}
+
+\subsection{Teilaufgabe a)}
+
+\begin{itemize}
+\item[\textbf{$H$}] Der Händler ist ehrlich.
+\item[\textbf{$S$}] Das Saatgut ist gut.
+\item[\textbf{$W_1$}] Das Wetter ist gut.
+\item[\textbf{$G$}] Horst hat ausreichend Geld.
+\item[\textbf{$W_2$}] Horst fährt weg.
+\item[\textbf{$K$}] Es ist Kirmes.
+\item[\textbf{$A$}] Borsti ist allein.
+\item[\textbf{$W_3$}] Der Wolf ist satt.
+\item[\textbf{$B$}] Borsti wird gefressen.
+\end{itemize}
+
+\newpage
+
+\subsection{Teilaufgabe b)}
+
+Annahme:\\
+$K$\\
+\\
+Frage:\\
+$\neg ((W_1 \wedge H) \Rightarrow \neg B)$\\
+\\
+Umformung der Frage:\\
+$\neg ((W_1 \wedge H) \Rightarrow \neg B) \Leftrightarrow \neg ( \neg (W_1 \wedge H) \vee \neg B) \Leftrightarrow ((W_1 \wedge H) \wedge B)$\\
+\\
+Daraus folgt Menge von Hornformeln:\\
+$\{ \{\neg H,S\}, \{\neg S,\neg W_1,G\}, \{\neg G,W_2\}, \{\neg W_2,\neg K,A\}, \{\neg W_2,W_3\}, \{\neg W_3,\neg B\}, \{A,\neg B\}, \{W_1\}\, \{H\}, \{B\}\}$\\
+\\
+SLD-Rsolution:\\
+$1: \{\neg H,S\}$\\
+$2: \{\neg S,\neg W_1,G\}$\\
+$3: \{\neg G,W_2\}$\\
+$4: \{\neg W_2,\neg K,A\}$\\
+$5: \{\neg W_2,W_3\}$\\
+$6: \{\neg W_3,\neg B\}$\\
+$7: \{A,\neg B\}$\\
+$8: \{W_1\}$\\
+$9: \{H\}$\\
+$10: \{B\}$\\
+$11: 6+10 = \{ \neg W_3 \}$\\
+$12: 7+10 = \{A \}$\\
+$13: 1+9 = \{ S \}$\\
+$14: 2+8 = \{ \neg S, G \}$\\
+$15: 2+13 = \{ \neg W_1,G \}$\\
+$16: 13+14 = \{G \}$\\
+$17: 3+16 = \{ W_2 \}$
+$18: 4+17 = \{ \neg K, A \}$\\
+$19: 5+17 = \{ W_3 \}$\\
+$20: 6+19 = \{ \neg B \}$\\
+$21: 11+19 = \emptyset$ oder $22: 10+20 = \emptyset$
+
+\subsection{Teilaufgabe c)}
+
+$fof(1,axiom, \sim h \, \& \, s).$\\
+$fof(2,axiom, \sim s \, \& \sim w1 \, \& \, g).$\\
+$fof(3,axiom, \sim g \, \& \, w2).$\\
+$fof(4,axiom, \sim w2 \, \& \, \sim k \, \& \, a).$\\
+$fof(5,axiom, \sim w2 \, \& \, w3).$\\
+$fof(6,axiom, \sim w3 \, \& \, \sim b).$\\
+$fof(7,axiom, a \, \& \, \sim b).$\\
+$fof(8,conjecture, w1 \, \& \, h \, \& \, b).$
+
+\end{document}

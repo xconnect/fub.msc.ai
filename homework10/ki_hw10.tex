@@ -1,0 +1,113 @@
+\documentclass[12pt]{article}
+
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb} % to display symbols for real numbers, integers etc. Usage: \mathbb{R}
+\usepackage{graphicx}
+\usepackage{listings} % to display programming code
+%\usepackage[ngerman]{babel}
+\usepackage{color}
+\usepackage{relsize} % to display scaled math symbols (big summation symbol etc.)
+\usepackage{textcomp}
+
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{ % to display programming code in nice colors
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	language=matlab,
+		basicstyle=\scriptsize, %for extra small font size
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+		frame=single, %draw frame
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+        numbers=left,
+        stepnumber=1,
+        firstnumber=1,
+        numberfirstline=true,
+        linewidth=14cm,
+}
+
+\title{\"Ubungsblatt 10\\ \glqq K\"unstliche Intelligenz\grqq}
+\author{T. Glei\ss ner, N. Lehmann, A. Zubarev}
+\date{03.07.2015}
+\begin{document}
+\maketitle
+%\renewcommand{\contentsname}{Table of Contents}
+\tableofcontents
+\newpage
+
+\section{Parser / DCG}
+
+\begin{lstlisting}[language=Prolog]
+test(X) :- expr(X,"1.3*23+(-4)*(8+5)",[]).
+test2(X) :- expr(X,"1*2",[]). /* extra Test */
+ 
+expr(add(Y,Z)) --> term(Y), "+", expr(Z).
+expr(X)     --> term(X).
+
+term(mul(Y,Z)) --> n(Y), "*", n(Z).
+term(mul(Y,Z)) --> n(Y), "*", term(Z).
+
+term(X)     --> n(X).
+term(X)     --> "(", expr(X), ")".
+
+/******************** LÖSUNG **********************/
+term(mul(X,Y)) --> n(X), "*", term(Y).
+term(mul(X,Y)) --> "(", expr(X), ")", "*", term(Y).
+/**************************************************/
+ 
+n(X)        --> z(X,_).
+n(X)        --> z(Y,_), ".", z(Z,A), {X is Y+10^(-A)*Z}.
+n(X)        --> "-", z(Y,_), {X is -Y}.
+n(X)        --> "-", z(Y,_), ".", z(Z,A), {X is -(Y+10^(-A)*Z)}.
+% z(wert,anzahl der ziffern)
+z(X,B)      --> num(Y), z(Z,A), {X is Y*10^A+Z, B is A+1}.
+z(X,1)      --> num(X).
+num(1)      --> "1".
+num(2)      --> "2".
+num(3)      --> "3".
+num(4)      --> "4".
+num(5)      --> "5".
+num(6)      --> "6".
+num(7)      --> "7".
+num(8)      --> "8".
+num(9)      --> "9".
+num(0)      --> "0".
+\end{lstlisting}
+
+\newpage
+
+\section{Certainty Factors / MYCIN Algebra}
+
+\begin{lstlisting}[language=Prolog]
+main :greeting, repeat, write('> '), read(X), do(X), X == quit,!.
+
+algebra1(RuleCF,CF,AdjustedCF):X is RuleCF*CF/100, int_round(X,AdjustedCF).
+algebra2(CF,OldCF,NewCF):minimum(CF,OldCF,NewCF).
+algebra3(CF,RestCF,NewCF):CF >= 0, RestCF >= 0, X is CF + RestCF * (100 CF) / 100, int_round(X,NewCF).
+algebra3(CF,RestCF,NewCF):CF < 0, RestCF < 0, X is (CF + RestCF * (100 + CF) / 100), int_round(X,NewCF).
+algebra3(CF,RestCF,NewCF):(CF < 0; RestCF < 0), (CF > 0; RestCF > 0), abs_minimum(CF,RestCF,MCF), X is 100 * (CF + RestCF) / (100 MCF), int_round(X,NewCF).
+int_round(X,I):X >= 0, I is integer(X+0.5).
+int_round(X,I):X < 0, I is integer(X0.5).
+minimum(X,Y,X) :X =< Y,!.
+minimum(X,Y,Y) :Y =< X.
+abs_minimum(A,B,X) :absolute(A, AA),absolute(B, BB),minimum(AA,BB,X).
+absolute(X, X) :X >= 0.
+absolute(X, Y) :X < 0, Y is X.
+\end{lstlisting}
+
+\end{document}

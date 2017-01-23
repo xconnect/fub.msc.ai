@@ -1,0 +1,49 @@
+Aufgabe 3)
+
+Teilaugabe b)
+
+Gegebene Axiome: {{~H, S}, {~S, ~W1​, G}, {~G, W​2}, {~W​2, ~K, A}, {~W​2, W​3}, {~W3​, ~B}, {A, ~B}}
+
+Annahme: K = Kirmes ist in der Stadt.
+
+Frage: Wird Borsti nicht gefressen, wenn das Wetter im Sommer gut und der Händler ehrlich waren? 
+((W1 ∧ H) => ~B) ≡ (~W1 ∨ ~H ∨ ~B)
+
+Man muss nun klären, dass wenn K zu den Hauptaxiomen hinzugefügt wird, dass daraus unsere Fragestellung folgt:
+(((~H ∨ S) ∧ (~S ∨ ~W1 ∨ G) ∧ (~G ∨ W2) ∧ (~W2 ∨ ~K ∨ A) ∧ (~W2 ∨ W3) ∧ (~W3 ∨ ~B) ∧ (A ∨ ~B)) ∧ K) => (~W1 ∨ ~H ∨ ~B)
+
+Da wir eine Tautologie Zeigen wollen, so müssen wir das ganze noch einmal mit einer Negation versehen:
+~((((~H ∨ S) ∧ (~S ∨ ~W1 ∨ G) ∧ (~G ∨ W2) ∧ (~W2 ∨ ~K ∨ A) ∧ (~W2 ∨ W3) ∧ (~W3 ∨ ~B) ∧ (A ∨ ~B)) ∧ K) => (~W1 ∨ ~H ∨ ~B))
+
+≡ ~( ~(((~H ∨ S) ∧ (~S ∨ ~W1 ∨ G) ∧ (~G ∨ W2) ∧ (~W2 ∨ ~K ∨ A) ∧ (~W2 ∨ W3) ∧ (~W3 ∨ ~B) ∧ (A ∨ ~B)) ∧ K) ∨ (~W1 ∨ ~H ∨ ~B))
+
+≡ (~H ∨ S) ∧ (~S ∨ ~W1 ∨ G) ∧ (~G ∨ W2) ∧ (~W2 ∨ ~K ∨ A) ∧ (~W2 ∨ W3) ∧ (~W3 ∨ ~B) ∧ (A ∨ ~B) ∧ K ∧ W1 ∧ H ∧ B
+
+Daraus folgt dann die Klausel:
+{{~H, S}, {~S, ~W1​, G}, {~G, W​2}, {~W​2, ~K, A}, {~W​2, W​3}, {~W3​, ~B}, {A, ~B}, {K}, {W1}, {H}, {B}}
+
+1: {~H, S}
+2: {~S, ~W1​, G}
+3: {~G, W​2}
+4: {~W​2, ~K, A}
+5: {~W​2, W​3}
+6: {~W3​, ~B}
+7: {A, ~B}
+8: {K}
+9: {W1}
+10: {H}
+11: {B}
+12: 11 + 6 = {~W3}
+13: 8 + 4 = {~W2, A}
+14: 10 + 1 = {S}
+15: 14 + 2 = {~W1, G}
+16: 15 + 3 = {~W1, W2}
+17: 16 + 5 = {~W1, W3}
+18: 17 + 12 = []
+
+Folgende Schritte wurden ignoriert wegen Wiederverwendung + sie führen nicht zum Ziel:
+19: 11 + 7 = {A}
+20: 13 + 3 = {~G, A} --- (in der Skizze ist es falsch 13 + 5 was aber nicht {A} ergibt)
+[...]
+
+Der oben beschriebene Weg ist kürzer und führt zum Ziel. Damit ist die Nichterfüllbarkeit sowie die Tautologie gezeigt.

@@ -1,0 +1,152 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ngerman}
+ 
+\title{Künstliche Intelligenz\\~\\Hausaufgabe 1\\ \small{N. Lehmann, A. Zubarev}}
+\date{20.04.2015}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Familiendatenbank in Prolog}
+
+\subsection{father, mother, male, female}
+
+\begin{verbatim}
+male(aang).
+male(tenzin).
+male(bumi).
+male(meelo).
+
+female(katara).
+female(kya).
+female(pema).
+female(jinora).
+female(ikki).
+
+father(aang, kya).
+father(aang, tenzin).
+father(aang, bumi).
+father(tenzin, jinora).
+father(tenzin, ikki).
+father(tenzin, meelo).
+
+mother(katara, kya).
+mother(katara, tenzin).
+mother(katara, bumi).
+mother(pema, jinora).
+mother(pema, ikki).
+mother(pema, meelo).
+\end{verbatim}
+
+\subsection{parent, son, daughter, brother, sister, grandfather, grandmother}
+
+\begin{verbatim}
+parent(Elternteil, Kind) :- mother(Elternteil,Kind); father(Elternteil,Kind).
+
+son(Kind, Elternteil) :- parent(Elternteil,Kind), male(Kind).
+
+daugther(Kind, Elternteil) :- parent(Elternteil,Kind), female(Kind).
+
+/* Falls es einen Vater gibt dann gib nur die anderen Kinder von dem Vater aus,
+   sonst von der Mutter -> damit sind Duplikate ausgeschlossen */
+/* Halbgeschwister sind nur dann moeglich, falls kein Vater vorhanden ist und
+   die Kinder, die durch die Mutter gefunden werden einen anderen Vater haben */
+
+brother(Kind_1, Kind_2) :- male(Kind_1), (father(Vater, Kind_1)
+   -> father(Vater, Kind_2); (mother(Mutter, Kind_1), mother(Mutter, Kind_2))),
+      (Kind_1 \= Kind_2).
+
+sister(Kind_1, Kind_2) :- female(Kind_1), (father(Vater, Kind_1)
+   -> father(Vater, Kind_2); (mother(Mutter, Kind_1), mother(Mutter, Kind_2))),
+      (Kind_1 \= Kind_2).
+
+grandfather(Grossvater, Enkelkind) :- male(Grossvater), parent(Grossvater, Kind),
+                                      parent(Kind, Enkelkind).
+
+grandmother(Grossmutter, Enkelkind) :- female(Grossmutter), parent(Grossmutter, Kind),
+                                       parent(Kind, Enkelkind).
+\end{verbatim}
+
+\subsection{predesessor, successor}
+
+\begin{verbatim}
+/* Hier zaehlen aber keine Geschwister der Vorfahrend dazu: lediglich nur die Eltern
+   und die Eltern der Eltern uws. */
+predecessor(Direkter_Vorfahre, Person) :- parent(Direkter_Vorfahre, Person).
+predecessor(Indirekter_Vorfahre, Person) :- parent(Indirekter_Vorfahre,
+                                            Direkter_Vorfahre),
+                                            predecessor(Direkter_Vorfahre,
+                                            Person).
+
+/* Hier werden alle Kinder aufgelistet sowie die Kinder der Kinder usw. */
+succsessor(Direkter_Nachfahre, Person) :- parent(Person, Direkter_Nachfahre).
+succsessor(Indirekter_Nachfahre, Person) :- parent(Direkter_Nachfahre,
+                                            Indirekter_Nachfahre),
+                                            succsessor(Direkter_Nachfahre,
+                                            Person).
+\end{verbatim}
+
+\section{Chinese Room Thought Experiment}
+
+Das \textit{Chinesische Zimmer - Gedankenexperiment} ist eine (Negativ-)Antwort von John Searle auf den \textit{Turing Test} von Alan Turing.\\
+\\
+Der Turing Test von Alan Turing besagt, dass eine Maschine (ein Programm) dann eine starke künstliche Intelligenz ist/hat, wenn ein Mensch durch (intensive) Befragung der Maschine (unter Einbeziehung einer Referenzkommunikation mit einem Menschen) nicht feststellen kann, ob es sich um eine Maschine oder um einen Menschen handelt.\\
+\\
+\underline{Das Chinesische Zimmer - Gedankenexperiment}:\\
+\\
+Ein nicht chinesische sprechender Mensch sitzt in einem Zimmer und hat lediglich eine in seiner Muttersprache geschriebene Anleitung, die es ihm ermöglicht chinesische Schriftzeichen und ganze Sätze, ohne ihren Inhalt (Semantik) zu verstehen, zu lesen und (mit Hilfe einer Wissensdatenbank in Form von Skripten) in (sinnvolle) chinesische Antwortsätze zu überführen. Chinesen außerhalb des Zimmers, die von außen Nachrichten in das Zimmer senden und die (auf die beschriebene Art) bearbeiteten Antworten zurückerhalten gewinnen den Eindruck, dass sich im inneren des Zimmers ein Mensch befindet, der ihre Muttersprache beherrscht, obwohl dieses nicht der Fall ist, da der Mensch im inneren des Raumes nur stupide einem Regelwerk folgt.\\
+\\
+\underline{Was ist Intelligenz?}\\
+\\
+Ohne eine Antwort auf diese Frage, ist die Frage ob \textit{X} Intelligenz besitzt sinnfrei! Es gibt bis heute keine allgemeingültige Antwort auf die Frage was Intelligenz ist. Für die weitere Bearbeitung dieser Aufgabe nehmen wir das CHC-Modell (John B. Carroll)  der Intelligenz an, das sich dadurch auszeichnet, dass es mehrere plausible Modelle integriert. Ein elementarer Bestandteil dieses Modells der Intelligenz ist die Fähigkeit neue Dinge zu Lernen (\textit{Gf}, oder nach Raymond Bernard Cattell \textit{Fluide Intelligenz}).\\
+\\
+\underline{Gegenargumente}:\\
+\begin{itemize}
+\item Im beschriebenen Gedankenexperiment liegt die Intelligenz offensichtlich in der Anleitung. Die Frage, die man sich hier stellen muss ist, kann eine solche Anleitung überhaupt existieren. Das Problem der Erstellung einer solchen Anleitung sollte eigentlich auch zum Gedankenexperiment dazugehören.
+\item Ein Mensch, der sich in einem solchen Raum befinden würde, würde (intrinsisch motiviert durch bewusstes Handeln) beginnen die chinesische Sprache zu lernen. Die Annahme der sich außerhalb befindenden Chinesen würde sich nach einiger Zeit von selbst bewahrheiten. 
+\item Ein Individuum kann nach dem CHC-Modell keine Intelligenz ohne ein Bewusstsein besitzen. Der Mensch im Raum könnte allerdings durch eine Maschine ersetzt werden, da dieser nur einem Regelwerk folgt. Die Frage, die sich hier auftut ist: Kann eine Simulation von Intelligenz ein Bewusstsein erzeugen (Qualiaproblem oder vergleichbare Probleme)?
+\item Wenn schon der Mensch im Raum substituiert werden kann, kann dann der Raum als Substitut für ein Individuum verstanden werden? In diesem Fall wird ebenfalls ein Regelwerksystem beschrieben (siehe Qualiaproblem).
+\end{itemize}
+\underline{Unsere Position:}\\
+\\
+Unter der Annahme, dass eine Anleitung, wie sie im Experiment beschrieben ist, existieren könnte, bleibt die Kernfrage offen, ob eine Simulation von Intelligenz selbst eine Intelligenz ist. Würde eine Simulation von Intelligenz auch eine Simulation von Bewusstsein erzeugen? Ist ein simuliertes Bewusstsein ein Bewusstsein?\\
+\\
+\textbf{An dieser Stelle wird uns das Problem zu philosophisch!}\\
+\\
+Nach dem CHC-Modell müsste die Antwort lauten:
+\begin{itemize}
+\item Nein, im Raum befindet sich keine Intelligenz.
+\item Nein, der Raum ist/hat keine Intelligenz.
+\end{itemize}
+
+\newpage
+
+\section{Strong AI vs Weak AI}
+
+Der Begriff \textit{starke KI} \textit{(strong AI)} beschreibt eine künstliche Form der Intelligenz (Programm), die mit der eines menschlichen Individuums vergleichbar, bzw. sogar besser/höher entwickelt als diese ist.\\
+\\
+Die starke KI ist in der Lage zum
+\begin{itemize}
+\item logischen \textit{Denken} (alle hierbei möglichen Modelle)
+\item Treffen von Entscheidungen (bei Unsicherheit)
+\item Lernen (alle hierbei möglichen Modelle: CHC, BIS, Radex, ...)
+\item Kommunikation in natürlicher Sprache
+\item Planen
+\item Einsatz aller Fähigkeiten zum erreichen eines Ziels
+\end{itemize}
+Der Begriff \textit{schwache KI} \textit{(weak AI)} beschreibt eine künstliche Intelligenz, die auf ein konkretes Anwendungsproblem begrenzt, eine Anwendung intelligent erscheinen lässt.\\
+\\
+Die schwache KI findet ihren Einsatz bspw. in
+\begin{itemize}
+\item Expertensystemen
+\item Navigationssystemen
+\item Computerspielen
+\item Spracherkennung
+\end{itemize}
+Bei beiden Begriffserklärungen liegt ein Problem in der Definition von Intelligenz, da diese bis heute unzureichend definiert ist. Eine scharfe Trennung der Begriffe \textit{Intelligenz} und \textit{Bewusstsein} ist beispielsweise schwierig, obwohl diese Begriffe oft miteinander assoziiert werden. Dieses Problem wird durch das Experiment in Aufgabe 2 deutlich gemacht.
+
+\end{document}

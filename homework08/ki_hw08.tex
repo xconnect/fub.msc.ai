@@ -1,0 +1,169 @@
+\documentclass[12pt]{article}
+
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb} % to display symbols for real numbers, integers etc. Usage: \mathbb{R}
+\usepackage{graphicx}
+\usepackage{listings} % to display programming code
+%\usepackage[ngerman]{babel}
+\usepackage{color}
+\usepackage{relsize} % to display scaled math symbols (big summation symbol etc.)
+\usepackage{textcomp}
+
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{ % to display programming code in nice colors
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	language=matlab,
+		basicstyle=\scriptsize, %for extra small font size
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+		frame=single, %draw frame
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+        numbers=left,
+        stepnumber=1,
+        firstnumber=1,
+        numberfirstline=true,
+        linewidth=14cm,
+}
+
+\title{\"Ubungsblatt 8\\ \glqq K\"unstliche Intelligenz\grqq}
+\author{T. Glei\ss ner, N. Lehmann, A. Zubarev}
+\date{19.06.2015}
+\begin{document}
+\maketitle
+%\renewcommand{\contentsname}{Table of Contents}
+\tableofcontents
+\newpage
+
+\section{Meta-Interpreter}
+
+\begin{lstlisting}[language=Prolog]
+/* Prolog meta interpreter - implements TRUE, AND, OR and SYSTEM CALLS  */
+
+/* prolog expressions to solve must be in brackets                      */
+
+/***************************** examples *********************************/
+/*                                                                      */
+/* ?- solve((vater(adam,theo))).                                        */
+/* false.                                                               */
+/*                                                                      */
+/* ?- solve((vater(adam,abel))).                                        */
+/* true.                                                                */
+/*                                                                      */
+/* ?- solve((vater(adam,abel),vater(adam,cain),vater(adam,theo))).      */
+/* false.                                                               */
+/*                                                                      */
+/* solve((vater(adam,theo);(vater(adam,cain),vater(adam,abel)))).       */
+/* true.                                                                */
+/*                                                                      */
+/************************************************************************/
+
+solve(true) :- !.
+solve((A,B)) :- A, solve(B).
+solve((A;B)) :- A; solve(B).
+solve(A) :- system(A), !, call(A).
+solve(A) :- clause(A,B), solve(B).
+
+system(=(_,_)).
+system(==(_,_)).
+system(fail).
+system(nl).
+system(read(_)).
+system(write(_)).
+system(is(_,_)).
+system(>(_,_)).
+system(<(_,_)).
+system(clause(_,_)).
+system(call(_)).
+system(var(_)).
+
+/* test facts and rules */
+vater(adam,abel).
+vater(adam,cain):-!.
+vater(abel,isaac).
+opa(X,Y):-!,vater(X,Z),vater(Z,Y).
+
+a:-c.
+a:- !,fail.
+a:- b,!,c.
+a:-c.
+b.
+c.
+\end{lstlisting}
+
+\section{Expertensystem}
+
+\subsection{Native Shell}
+
+\begin{lstlisting}[language=Prolog]
+/* Beim 'quit' soll aufgehoert werden */
+main :- greeting, repeat, write('> '), read(X), do(X), X == quit, !.
+
+/* Hier haben wir eine Disjunktion innerhalb einer Konjuktion. ((Goal_1; Goal_2), Rest) */
+prove(((Goal_1; Goal_2), Rest), Hist) :­ !, ((prov(Goal_1, [Goal_1 | Hist]), prove(Rest, Hist)); (!, prov(Goal_2, [Goal_2 | Hist]), prove(Rest, Hist))).
+
+/* Hier haben wir ausschließlich eine Disjunktion. (Goal_1; Goal_2) */
+prove((Goal_1; Goal_2), Hist) :­ !, ((prov(Goal_1, [Goal_1 | Hist])); (!, prov(Goal_2, [Goal_2 | Hist]))).
+\end{lstlisting}
+
+\newpage
+
+\subsection{Wissensdatenbank}
+
+\begin{lstlisting}[language=Prolog]
+% GREYHOUNDS - a sample greyhound identification system for use with the native shell.
+% top_goal where Native starts the inference.
+top_goal(X) :- greyhound(X).
+order(langhaar) :- fellart(lang).
+order(rauhhaar) :- fellart(rauh).
+order(kurzhaar) :- fellart(kurz).
+family(okzidental) :- order(kurzhaar).
+family(oriental)   :- order(langhaar).
+family(mediterran) :- order(rauhhaar).
+greyhound(afghane) :- family(oriental), voice(laut), head(schlank), color(hellbraun), country(afghanistan).
+greyhound(barsoi) :- family(oriental), voice(leise), head(schlank), color(hellbraun), country(russland).
+greyhound(saluki) :- family(oriental), voice(laut), head(schlank), color(hellbraun), country(persien).
+greyhound(deerhound) :- family(okzidental), voice(laut), head(schlank), color(braun), country(schottland).
+greyhound(irischer wolfshund) :- family(oriental), voice(laut), head(breit), color(grau), country(irland).
+greyhound(chart_polski) :- family(mediterran), voice(leise), head(breit), color(hellbraun), country(polen).
+greyhound(galgo_espagnol) :- family(mediterran), voice(laut), head(schlank), color(gescheckt), country(spanien).
+greyhound(italienisches_windspiel) :- family(okzidental), voice(laut), head(schlank), color(gescheckt), country(italien).
+greyhound(magyar_agar) :- family(oriental), voice(leise), head(schlank), color(hellbraun), country(ungarn).
+greyhound(sloughi) :- family(oriental), voice(laut), head(schlank), color(hellbraun), country(nordafrika).
+greyhound(whippet) :- family(okzidental), voice(leise), head(schlank), (color(gescheckt); color(hellbraun); color(weis)), country(england).
+greyhound(grayhound) :- family(okzidental), voice(laut), head(schlank), color(gescheckt), country(england).
+voice(X)   :- ask(voice,X).
+head(X)    :- ask(head,X).
+color(X)   :- ask(color,X).
+country(X) :- ask(country,X).
+fellart(X) :- menuask(fellart,X,[lang,rauh,kurz]).
+country(russland).
+country(polen).
+country(schottland).
+country(spanien).
+country(england).
+country(irland).
+country(italien).
+country(ungarn).
+country(afghanistan).
+country(persien).
+country(nordafrika).
+multivalued(color).
+\end{lstlisting}
+
+\end{document}

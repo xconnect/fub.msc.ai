@@ -1,0 +1,36 @@
+Aufgabe 3)
+
+Teilaufgabe c)
+
+FOF:
+
+Bauer Horst besitzt einen kleinen Acker, einen Wolf und das Schwein Borsti.
+fof(1, axiom, istBauer(Horst)).
+
+fof(2, axiom, istWolf(Wolf)).
+fof(3, axiom, istSchein(Borsti)).
+
+fof(4, axiom, besitzt(Horst, Acker)).
+fof(5, axiom, besitzt(Horst, Wolf)).
+fof(6, axiom, besitzt(Horst, Borsti)).
+
+Wenn der Händler ehrlich ist, ist das Saatgut, das Horst bei ihm kauft, gut.
+fof(7, axiom, ![X,Y]: istHaendlerEhrlich(X) => istSaatGut(Y)).
+
+Wenn das Saatgut und das Wetter im Sommer gut sind, verdient Horst ausreichend Geld.
+fof(8, axiom, ![X,Y]?[Z]: istSaatGut(X) ∧ istWetterGut(Y) => istBauer(Z) ∧ ausrreichendVerdient(Z)).
+
+Wenn er ausreichend Geld hat, füttert er den Wolf.
+fof(9, axiom, ?[X,Y]: istBauer(X) ∧ ausrreichendVerdient(X) => istWolf(Y) ∧ gefüttert(Y)).
+
+Wenn er den Wolf gefüttert hat und in der Stadt Kirmes ist, geht er in die Stadt und lässt Wolf und Borsti allein.
+fof(10, axiom, ?[X,Y,Z]: istWolf(X) ∧ gefüttert(X) ∧ inDerStadtIst(Kirmes) => istSchwein(Z) ∧ sindAllein(X, Z)).
+
+Wenn der Wolf gefüttert worden ist, ist er satt.
+fof(11, axiom, ![X]: istWolf(X) ∧ gefüttert(X) => istSatt(X)).
+
+Wenn der Wolf satt ist oder der Bauer anwesend ist, wird Borsti nicht gefressen.
+fof(12, axiom, ?[X,Y,Z]: istWolf(X) ∧ (istSatt(X) ∨ (istBauer(Y) ∧ anwesend(Y))) => istSchwein(Z) ∧ ~wirdGefressen(Z)).
+
+Aus Teilaufabe b) In der Stadt ist Kirmes.
+fof(13, conjuncture, inDerStadtIst(Kirmes)).
